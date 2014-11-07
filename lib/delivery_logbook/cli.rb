@@ -45,6 +45,11 @@ module DeliveryLogbook
       end
 
       command :stats do |c|
+        c.syntax = "dlog stats"
+        c.description = "Displays statistics calculated from your logbook."
+
+        c.action do
+        end
       end
     end
   end
