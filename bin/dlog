@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require "delivery_logbook"
+
+DeliveryLogbook::run_cli
