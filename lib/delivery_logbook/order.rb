@@ -1,8 +1,19 @@
+require "delivery_logbook/flags"
+
+require "nutella"
+
 module DeliveryLogbook
   class Order
-    initializer *%i[ticket total received date notes] do
-      @tip = received - total
-      @in_pocket = tip + 1
+    attr_reader :ticket
+
+    initializer *%i[ticket total received date notes flags] do
+      @tip = @received - @total
+      @in_pocket = @tip + 1
+
+      @flags << :s if stiff?
+      @flags << :t if good?
+
+      @flags &= FLAGS.keys
     end
 
     def stiff?
