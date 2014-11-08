@@ -25,7 +25,7 @@ module DeliveryLogbook
 
     # Saves the orders to a YAML file.
     def save
-      File.write DATA_FILE, @log.to_yaml
+      File.write DATA_FILE, @orders.to_yaml
     end
   end
 end
