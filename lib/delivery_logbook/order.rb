@@ -6,7 +6,7 @@ module DeliveryLogbook
   class Order
     attr_reader :ticket
 
-    initializer *%i[ticket total received date notes flags] do
+    initializer *%i[ticket address total received date notes flags] do
       @tip = @received - @total
       @in_pocket = @tip + 1
 
@@ -28,6 +28,8 @@ module DeliveryLogbook
       <<-EOS.heredoc.strip
       Ticket ##{@ticket}
       Date: #{@date}
+
+      Address: #{@address}
 
       Received: $#{@received} / $#{@total}
       Tip: $#{@tip}

@@ -42,12 +42,14 @@ module DeliveryLogbook
             flags = (ticket[FLAGS_REGEX] || "").downcase.chars.map &:to_sym
             ticket.gsub! FLAGS_REGEX, ""
 
+            address = ask("Address: ").to_s
+
             total = ask("Total: ", Float) { |q| q.above = 0 }
             received = ask("Received: ", Float) { |q| q.above = 0 }
 
             notes = ask("Notes: ").to_s
 
-            order = Order.new ticket, total, received, date, notes, flags
+            order = Order.new ticket, address, total, received, date, notes, flags
 
             puts
 
