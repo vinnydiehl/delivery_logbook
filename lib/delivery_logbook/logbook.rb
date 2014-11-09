@@ -16,6 +16,7 @@ module DeliveryLogbook
 
     def delete(ticket)
       @orders.delete_if { |o| o.ticket = ticket }
+      save
     end
 
     def customer(address)
