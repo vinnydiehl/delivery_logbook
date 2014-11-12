@@ -3,6 +3,7 @@
 require "commander/import"
 require "date"
 require "nutella"
+require "street_address"
 
 module DeliveryLogbook
   class CLI
@@ -42,7 +43,7 @@ module DeliveryLogbook
             flags = (ticket[FLAGS_REGEX] || "").downcase.chars.map &:to_sym
             ticket.gsub! FLAGS_REGEX, ""
 
-            address = ask("Address: ").to_s
+            address = StreetAddress::US.parse(ask "Address: ")
 
             total = ask("Total: ", Float) { |q| q.above = 0 }
             received = ask("Received: ", Float) { |q| q.above = 0 }

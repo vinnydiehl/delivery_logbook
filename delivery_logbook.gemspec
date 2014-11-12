@@ -27,6 +27,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "commander", "~> 4.2"
   gem.add_dependency "nutella", "~> 0.12"
+  gem.add_dependency "StreetAddress", "~> 1.0"
 
   gem.add_development_dependency "rake", "~> 10.3"
 end
