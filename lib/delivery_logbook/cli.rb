@@ -25,8 +25,8 @@ module DeliveryLogbook
                  "Choose the date to add deliveries for (default today)"
 
         c.action do |args, opts|
-          # Date is an unsupported option type so do it with strings
-          date = Date.parse opts.date || Date.today.to_s
+          # Date is an unsupported option type so do it a string
+          date = Date.parse opts.date || Date.today
 
           loop do
             # String inputs get #to_s because of a nasty HighLine bug that
@@ -73,6 +73,18 @@ module DeliveryLogbook
         c.description = "Search for a customer or a specific delivery."
 
         c.action do |args|
+          # The menu returns an array with arguments to Logbook#search
+          results = log.search *(choose do |menu|
+            menu.prompt = "Search method: "
+
+            menu.choices(*%i[Ticket Date Address Notes Flags]) do |choice|
+               [ask("Enter #{choice}: "), choice]
+            end
+          # Query and method should both be lowercase so that the search can be
+          # case-insensitive and method can be passed to #send
+          end.map &:downcase)
+
+          results.each { |r| puts "\n#{r}" }
         end
       end
 
