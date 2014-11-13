@@ -48,7 +48,7 @@ module DeliveryLogbook
             total = ask("Total: ", Float) { |q| q.above = 0 }
             received = ask("Received: ", Float) { |q| q.above = 0 }
 
-            notes = ask("Notes: ").to_s
+            notes = ask_editor if agree("Notes? ") { |q| q.default = "n" }
 
             order = Order.new ticket, address, total, received, date, notes, flags
 
