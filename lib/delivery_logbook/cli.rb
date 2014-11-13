@@ -64,6 +64,7 @@ module DeliveryLogbook
         c.description = "Delete a delivery."
 
         c.action do |args|
+          log.delete args[0]
         end
       end
 
