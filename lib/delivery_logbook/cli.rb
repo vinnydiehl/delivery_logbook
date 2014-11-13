@@ -43,7 +43,7 @@ module DeliveryLogbook
             flags = (ticket[FLAGS_REGEX] || "").downcase.chars.map &:to_sym
             ticket.gsub! FLAGS_REGEX, ""
 
-            address = StreetAddress::US.parse(ask "Address: ")
+            address = StreetAddress::US.parse ask("Address: ").to_s
 
             total = ask("Total: ", Float) { |q| q.above = 0 }
             received = ask("Received: ", Float) { |q| q.above = 0 }
