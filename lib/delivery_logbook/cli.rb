@@ -1,4 +1,4 @@
-%w[flags logbook order version].each { |r| require "delivery_logbook/#{r}" }
+%w[data flags logbook order version].each { |r| require "delivery_logbook/#{r}" }
 
 require "commander/import"
 require "date"
@@ -82,7 +82,7 @@ module DeliveryLogbook
           # case-insensitive and method can be passed to #send
           end.map &:downcase)
 
-          results.each { |r| puts "\n#{r}" }
+          results.each { |r| puts "\n#{"-" * TERM_WIDTH}\n\n#{r}" }
         end
       end
 
