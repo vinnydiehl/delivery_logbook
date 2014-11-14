@@ -1,4 +1,4 @@
-require "delivery_logbook/flags"
+%w[core_ext flags].each { |r| require "delivery_logbook/#{r}" }
 
 require "nutella"
 
@@ -27,7 +27,7 @@ module DeliveryLogbook
     def to_s
       <<-EOS.heredoc.strip
       Ticket ##{@ticket}
-      Date: #{@date.strftime "%d %B %Y"}
+      Date: #{@date.format}
 
       Address: #{@address}
 

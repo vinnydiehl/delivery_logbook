@@ -1,4 +1,6 @@
-%w[data flags logbook order version].each { |r| require "delivery_logbook/#{r}" }
+%w[core_ext data flags logbook order version].each do |r|
+  require "delivery_logbook/#{r}"
+end
 
 require "commander/import"
 require "date"
@@ -26,11 +28,13 @@ module DeliveryLogbook
           # Date is an unsupported option type so do it a string
           date = Date.parse(opts.date || Date.today.to_s)
 
+          puts "Adding deliveries for #{date.format}."
+
           loop do
             # String inputs get #to_s because of a nasty HighLine bug that
             # causes HighLine::String YAML serialization to be irreversible
 
-            ticket = ask("Ticket (q to quit): ") do |q|
+            ticket = ask("\nTicket (q to quit): ") do |q|
               q.validate = /(q(uit)?|\d{8}#{FLAGS_ANY_REGEX})/i
               q.responses[:not_valid] = <<-EOS.heredoc
                 Must be 8 digits followed by any number of the following flags:
@@ -53,11 +57,8 @@ module DeliveryLogbook
 
             notes = ask_editor if agree("Notes? ") { |q| q.default = "n" }
 
-            order = Order.new ticket, address, total, received, date, notes, flags
-
-            puts
-
-            Logbook.add order
+            Logbook.add Order.new ticket, address, total,
+                                  received, date, notes, flags
           end
         end
       end
