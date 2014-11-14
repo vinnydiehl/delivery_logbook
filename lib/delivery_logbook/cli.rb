@@ -8,8 +8,6 @@ require "street_address"
 module DeliveryLogbook
   class CLI
     def self.start
-      log = Logbook.new
-
       {
         name: "Delivery Logbook",
         version: VERSION,
@@ -26,7 +24,7 @@ module DeliveryLogbook
 
         c.action do |args, opts|
           # Date is an unsupported option type so do it a string
-          date = Date.parse opts.date || Date.today
+          date = Date.parse(opts.date || Date.today.to_s)
 
           loop do
             # String inputs get #to_s because of a nasty HighLine bug that
@@ -54,7 +52,7 @@ module DeliveryLogbook
 
             puts
 
-            log.add order
+            Logbook.add order
           end
         end
       end
@@ -64,7 +62,7 @@ module DeliveryLogbook
         c.description = "Delete a delivery."
 
         c.action do |args|
-          log.delete args[0]
+          Logbook.delete args[0]
         end
       end
 
@@ -74,7 +72,7 @@ module DeliveryLogbook
 
         c.action do |args|
           # The menu returns an array with arguments to Logbook#search
-          results = log.search *(choose do |menu|
+          results = Logbook.search *(choose do |menu|
             menu.prompt = "Search method: "
 
             menu.choices(*%i[Ticket Date Address Notes Flags]) do |choice|
