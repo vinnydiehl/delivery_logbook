@@ -27,7 +27,7 @@ module DeliveryLogbook
     def to_s
       <<-EOS.heredoc.strip
       Ticket ##{@ticket}
-      Date: #{@date}
+      Date: #{@date.strftime "%d %B %Y"}
 
       Address: #{@address}
 
