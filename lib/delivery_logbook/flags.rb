@@ -13,5 +13,6 @@ module DeliveryLogbook
     k: "Kids"
   }
 
+  FLAGS_LIST = FLAGS.keys.map(&:upcase).join ", "
   FLAGS_REGEX, FLAGS_ANY_REGEX = %w[+ *].map { |r| /[#{FLAGS.keys.join}]#{r}/i }
 end

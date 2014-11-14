@@ -32,6 +32,11 @@ module DeliveryLogbook
 
             ticket = ask("Ticket (q to quit): ") do |q|
               q.validate = /(q(uit)?|\d{8}#{FLAGS_ANY_REGEX})/i
+              q.responses[:not_valid] = <<-EOS.heredoc
+                Must be 8 digits followed by any number of the following flags:
+                #{FLAGS_LIST}
+                Example: 12345678LK
+              EOS
             end.to_s
 
             break if ticket[0] == "q"
@@ -76,7 +81,24 @@ module DeliveryLogbook
             menu.prompt = "Search method: "
 
             menu.choices(*%i[Ticket Date Address Notes Flags]) do |choice|
-               [ask("Enter #{choice}: "), choice]
+              [
+                ask("Enter #{choice}: ") do |q|
+                  case choice
+                  when :Ticket
+                    q.validate = /\d{8}/
+                    q.responses[:not_valid] = "Ticket number must be 8 digits."
+                  when :Date
+                    q.default = "#{Date.today.month}/#{Date.today.day}"
+                  when :Flags
+                    q.validate = /^#{FLAGS_REGEX}$/
+                    q.responses[:not_valid] = <<-EOS.heredoc
+                      Choose any number of the following:
+                      #{FLAGS_LIST}
+                    EOS
+                  end
+                end,
+                choice
+              ]
             end
           # Query and method should both be lowercase so that the search can be
           # case-insensitive and method can be passed to #send
