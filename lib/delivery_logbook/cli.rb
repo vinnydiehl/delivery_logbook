@@ -104,6 +104,8 @@ module DeliveryLogbook
           # case-insensitive and method can be passed to #send
           end.map &:downcase)
 
+          puts "\nNo results." if results.empty?
+
           results.each { |r| puts "\n#{"-" * TERM_WIDTH}\n\n#{r}" }
         end
       end
