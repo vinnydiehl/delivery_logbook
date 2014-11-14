@@ -38,7 +38,8 @@ module DeliveryLogbook
         end
       end
 
-      def customer(address)
+      def exists?(ticket)
+        orders.any? { |order| order.ticket == ticket }
       end
 
       private

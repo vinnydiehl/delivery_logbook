@@ -68,7 +68,14 @@ module DeliveryLogbook
         c.description = "Delete a delivery."
 
         c.action do |args|
-          Logbook.delete args[0]
+          if Logbook.exists?(args[0])
+            Logbook.delete args[0]
+            puts "Order ##{args[0]} deleted."
+          elsif args.empty?
+            puts "Usage: dlog delete TICKET"
+          else
+            puts "Order not found, nothing was changed."
+          end
         end
       end
 
