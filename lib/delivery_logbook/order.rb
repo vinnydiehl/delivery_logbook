@@ -31,9 +31,10 @@ module DeliveryLogbook
 
       Address: #{@address}
 
-      Received: $#{@received} / $#{@total}
-      Tip: $#{@tip}
-      In Pocket: $#{@in_pocket}
+      Total:     #{@total.to_currency}
+      Received:  #{@received.to_currency}
+      Tip:       #{@tip.to_currency}
+      In Pocket: #{@in_pocket.to_currency}
       EOS
     end
   end
