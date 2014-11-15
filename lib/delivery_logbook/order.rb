@@ -4,7 +4,7 @@ require "nutella"
 
 module DeliveryLogbook
   class Order
-    attr_reader *%i[ticket address date notes flags]
+    attr_reader *%i[ticket address date notes flags tip in_pocket]
 
     initializer *%i[ticket address total received date notes flags] do
       @tip = @received - @total

@@ -38,6 +38,20 @@ module DeliveryLogbook
         end
       end
 
+      def summarize(orders = orders)
+        summary = Hash[%i[tip in_pocket].map do |calculation|
+          [calculation, orders.map(&calculation).sum]
+        end]
+
+        <<-EOS.heredoc.strip
+          Orders:    #{orders.length}
+          Tips:      #{summary[:tip].to_currency}
+          Avg. Tip:  #{(summary[:tip] / orders.size).to_currency}
+
+          In Pocket: #{summary[:in_pocket].to_currency}
+        EOS
+      end
+
       def exists?(ticket)
         orders.any? { |order| order.ticket == ticket }
       end

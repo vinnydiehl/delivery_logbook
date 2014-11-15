@@ -30,6 +30,8 @@ module DeliveryLogbook
 
           puts "Adding deliveries for #{date.format}."
 
+          orders = []
+
           loop do
             # String inputs get #to_s because of a nasty HighLine bug that
             # causes HighLine::String YAML serialization to be irreversible
@@ -57,8 +59,16 @@ module DeliveryLogbook
 
             notes = ask_editor if agree("Notes? ") { |q| q.default = "n" }
 
-            Logbook.add Order.new ticket, address, total,
-                                  received, date, notes, flags
+            order = Order.new ticket, address, total, received, date, notes, flags
+
+            puts "\nTip: #{order.tip.to_currency}"
+
+            orders << order
+            Logbook.add order
+          end
+
+          unless orders.empty?
+            puts "\nSummary for #{date.format}\n\n#{Logbook.summarize orders}"
           end
         end
       end
@@ -84,11 +94,16 @@ module DeliveryLogbook
         c.description = "Search for a customer or a specific delivery."
 
         c.action do |args|
+          # We'll need to save their choice from the menu below
+          menu_choice = nil
+
           # The menu returns an array with arguments to Logbook#search
           results = Logbook.search *(choose do |menu|
             menu.prompt = "Search method: "
 
             menu.choices(*%i[Ticket Date Address Notes Flags]) do |choice|
+              menu_choice = choice
+
               [
                 ask("Enter #{choice}: ") do |q|
                   case choice
@@ -112,9 +127,15 @@ module DeliveryLogbook
           # case-insensitive and method can be passed to #send
           end.map &:downcase)
 
-          puts "\nNo results." if results.empty?
+          if results.empty?
+            puts "\nNo results."
+          else
+            results.each { |r| puts "\n#{LINE}\n\n#{r}" }
 
-          results.each { |r| puts "\n#{"-" * TERM_WIDTH}\n\n#{r}" }
+            if %i[Date Address Flags].include?(menu_choice)
+              puts "\n#{LINE}\n\nSummary\n\n#{Logbook.summarize results}"
+            end
+          end
         end
       end
 
@@ -123,6 +144,7 @@ module DeliveryLogbook
         c.description = "Displays statistics calculated from your logbook."
 
         c.action do
+          puts Logbook.summarize
         end
       end
     end
