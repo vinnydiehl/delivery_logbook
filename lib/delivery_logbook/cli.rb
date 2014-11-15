@@ -45,7 +45,7 @@ module DeliveryLogbook
               EOS
             end.to_s
 
-            break if ticket[0] == "q"
+            break if ticket[0].downcase == "q"
 
             # Ticket number and flags are input at once, break them down into
             # two separate variables
