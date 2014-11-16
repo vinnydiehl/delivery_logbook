@@ -135,7 +135,10 @@ module DeliveryLogbook
           if results.empty?
             puts "\nNo results."
           else
-            results.each { |r| puts "\n#{LINE}\n\n#{r}" }
+            results.each do |r|
+              puts "\n#{LINE}\n\n#{r}"
+              puts "\nNotes:\n\n#{r.notes}" if menu_choice == :Ticket && r.notes?
+            end
 
             if %i[Date Address Flags].include?(menu_choice)
               puts "\n#{LINE}\n\nSummary\n\n#{Logbook.summarize results}"

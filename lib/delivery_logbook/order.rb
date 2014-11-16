@@ -24,9 +24,14 @@ module DeliveryLogbook
       @tip >= 5
     end
 
+    def notes?
+      # #to_s for a nil check
+      !notes.to_s.empty?
+    end
+
     def to_s
       <<-EOS.heredoc.strip
-        Ticket ##{@ticket}#{" [Notes]" unless notes.to_s.empty?}
+        Ticket ##{@ticket}#{" [Notes]" if notes?}
         Date: #{@date.format}#{"
 
         Flags: #{flags.map { |f| FLAGS[f] }.join " | "}" unless flags.empty?}
