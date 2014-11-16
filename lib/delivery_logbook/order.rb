@@ -26,15 +26,17 @@ module DeliveryLogbook
 
     def to_s
       <<-EOS.heredoc.strip
-      Ticket ##{@ticket}
-      Date: #{@date.format}
+        Ticket ##{@ticket}#{" [Notes]" unless notes.to_s.empty?}
+        Date: #{@date.format}#{"
 
-      Address: #{@address}
+        Flags: #{flags.map { |f| FLAGS[f] }.join " | "}" unless flags.empty?}
 
-      Total:     #{@total.to_currency}
-      Received:  #{@received.to_currency}
-      Tip:       #{@tip.to_currency}
-      In Pocket: #{@in_pocket.to_currency}
+        Address: #{@address}
+
+        Total:     #{@total.to_currency}
+        Received:  #{@received.to_currency}
+        Tip:       #{@tip.to_currency}
+        In Pocket: #{@in_pocket.to_currency}
       EOS
     end
   end

@@ -56,7 +56,7 @@ module DeliveryLogbook
 
             total, received =
               { Total: 14.23, Received: 20 }.map do |prompt, default|
-              ask("#{p.to_s}: ", Float) do |q|
+              ask("#{prompt}: ", Float) do |q|
                 q.above = 0
                 q.default = default
               end
