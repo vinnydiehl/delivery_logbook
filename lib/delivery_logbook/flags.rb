@@ -9,8 +9,14 @@ module DeliveryLogbook
     # Took a long time to come to the door
     l: "Long",
 
+    # Invited me inside
+    i: "Inside",
+
     # Kids can order from any address and tend not to tip so flag them
-    k: "Kids"
+    k: "Kids",
+
+    # Smells like Christmas in their house
+    w: "Weed"
   }
 
   FLAGS_LIST = FLAGS.keys.map(&:upcase).join ", "
