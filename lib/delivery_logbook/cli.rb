@@ -37,9 +37,9 @@ module DeliveryLogbook
             # causes HighLine::String YAML serialization to be irreversible
 
             ticket = ask("\nTicket (q to quit): ") do |q|
-              q.validate = /(q(uit)?|\d{8}#{FLAGS_ANY_REGEX})/i
+              q.validate = /(q(uit)?|\d+#{FLAGS_ANY_REGEX})/i
               q.responses[:not_valid] = <<-EOS.heredoc
-                Must be 8 digits followed by any number of the following flags:
+                Must be a number followed by any number of the following flags:
                 #{FLAGS_LIST}
                 Example: 12345678LK
               EOS
@@ -52,7 +52,9 @@ module DeliveryLogbook
             flags = (ticket[FLAGS_REGEX] || "").downcase.chars.map &:to_sym
             ticket.gsub! FLAGS_REGEX, ""
 
-            address = StreetAddress::US.parse ask("Address: ").to_s
+            address = StreetAddress::US.parse ask("Address: ").to_s, informal: true
+            # TODO: Config file to set up defaults like this
+            address.postal_code ||= "08865"
 
             total, received =
               { Total: 14.23, Received: 20 }.map do |prompt, default|
@@ -113,8 +115,8 @@ module DeliveryLogbook
                 ask("Enter #{choice}: ") do |q|
                   case choice
                   when :Ticket
-                    q.validate = /\d{8}/
-                    q.responses[:not_valid] = "Ticket number must be 8 digits."
+                    q.validate = /\d+/
+                    q.responses[:not_valid] = "Ticket number must be numeric."
                   when :Date
                     q.default = "#{Date.today.month}/#{Date.today.day}"
                   when :Flags
